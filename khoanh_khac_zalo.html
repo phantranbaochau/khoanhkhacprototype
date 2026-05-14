@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khoảnh Khắc – Zalo Mini App Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #0d4a35;
+    --green-mid: #1a6b4a;
+    --green-light: #e8f2ed;
+    --green-glow: rgba(13,74,53,0.12);
+    --gold: #c9973a;
+    --gold-light: #f7f0e2;
+    --cream: #faf7f2;
+    --ink: #1a1a18;
+    --ink-soft: #4a4a42;
+    --ink-muted: #9a9a8e;
+    --white: #ffffff;
+    --red: #e05252;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Be Vietnam Pro', system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: #1a1f1c;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  /* ── PHONE FRAME ── */
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .screen-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .phone {
+    width: 375px;
+    height: 780px;
+    background: var(--cream);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 32px 80px rgba(0,0,0,0.6),
+      inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 120px; height: 34px;
+    background: #0d0d0d;
+    border-radius: 0 0 20px 20px;
+    z-index: 100;
+  }
+
+  /* ── ZALO STATUS BAR ── */
+  .status-bar {
+    height: 44px;
+    padding: 14px 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+  .status-time {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .status-icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .status-icons svg { width: 16px; height: 16px; fill: var(--white); }
+
+  /* ── ZALO TOP BAR ── */
+  .zalo-bar {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    position: relative;
+    z-index: 10;
+  }
+  .zalo-back {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white);
+  }
+  .zalo-back svg { width: 20px; height: 20px; }
+  .zalo-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--white);
+    flex: 1;
+  }
+  .zalo-more {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white);
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* ── SCREEN CONTENT ── */
+  .screen {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* scrollable inner */
+  .screen-inner {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 1 — ONBOARDING / QR LAND
+  ══════════════════════════════════════ */
+  .s1-hero {
+    background: var(--green);
+    padding: 96px 28px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .s1-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(201,151,58,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .s1-rings {
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    pointer-events: none;
+  }
+  .s1-rings::before {
+    content: '';
+    position: absolute;
+    inset: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .s1-rings::after {
+    content: '';
+    position: absolute;
+    inset: 60px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .s1-eyebrow {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .s1-title {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .s1-sub {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 24px;
+  }
+  .s1-body {
+    background: var(--cream);
+    flex: 1;
+    padding: 28px 24px 32px;
+  }
+  .s1-occasion-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+  }
+  .occasion-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .pill {
+    padding: 8px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 400;
+    border: 1px solid var(--green-light);
+    background: var(--white);
+    color: var(--green);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pill.active {
+    background: var(--green);
+    color: var(--white);
+    border-color: var(--green);
+  }
+  .s1-divider {
+    height: 1px;
+    background: rgba(26,26,24,0.08);
+    margin: 0 0 24px;
+  }
+  .s1-blend-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 16px rgba(13,74,53,0.08);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .blend-icon {
+    width: 48px; height: 48px;
+    background: var(--green-light);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .blend-info { flex: 1; }
+  .blend-viet {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 2px;
+  }
+  .blend-en {
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+  .blend-desc {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .cta-btn {
+    width: 100%;
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cta-secondary {
+    width: 100%;
+    background: transparent;
+    color: var(--green);
+    border: 1.5px solid var(--green-light);
+    border-radius: 14px;
+    padding: 14px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 2 — STREAK HOME
+  ══════════════════════════════════════ */
+  .s2-header {
+    background: var(--green);
+    padding: 96px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .s2-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 80%, rgba(201,151,58,0.12) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .s2-greeting {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .s2-name {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .streak-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .streak-flame {
+    font-size: 40px;
+    line-height: 1;
+    filter: drop-shadow(0 0 12px rgba(201,151,58,0.6));
+    animation: flamePulse 2s ease-in-out infinite;
+  }
+  @keyframes flamePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  .streak-info { flex: 1; }
+  .streak-count {
+    font-family: var(--serif);
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .streak-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .streak-badge {
+    background: var(--gold);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.06em;
+  }
+  .s2-body {
+    background: var(--cream);
+    flex: 1;
+    padding: 24px 20px 32px;
+  }
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+  }
+  .week-dots {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .week-dot {
+    flex: 1;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .week-dot.done {
+    background: var(--green);
+    color: var(--white);
+  }
+  .week-dot.done::after { content: '✓'; }
+  .week-dot.today {
+    background: var(--gold);
+    color: var(--white);
+    box-shadow: 0 0 0 3px rgba(201,151,58,0.25);
+  }
+  .week-dot.today::after { content: '☕'; font-size: 13px; }
+  .week-dot.empty {
+    background: rgba(26,26,24,0.06);
+    color: var(--ink-muted);
+  }
+  .week-dot.empty::after { content: '·'; font-size: 18px; line-height: 0; }
+  .occasion-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .occasion-item {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 8px rgba(13,74,53,0.06);
+  }
+  .occ-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .occ-icon.green { background: var(--green-light); }
+  .occ-icon.gold { background: var(--gold-light); }
+  .occ-info { flex: 1; }
+  .occ-viet { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 1px; }
+  .occ-en { font-size: 11px; color: var(--ink-muted); font-style: italic; }
+  .occ-arrow { color: var(--ink-muted); font-size: 16px; }
+  .locked-banner {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .locked-banner::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .locked-icon { font-size: 28px; }
+  .locked-text { flex: 1; }
+  .locked-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 3px; }
+  .locked-sub { font-size: 11px; color: rgba(255,255,255,0.55); }
+  .locked-prog {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 3 — OCCASION DETAIL / RATING
+  ══════════════════════════════════════ */
+  .s3-hero {
+    background: var(--green);
+    padding: 96px 24px 32px;
+    position: relative;
+    overflow: hidden;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .s3-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(201,151,58,0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .s3-moment-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .s3-title {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .s3-subtitle {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+  }
+  .s3-body {
+    background: var(--cream);
+    flex: 1;
+    padding: 28px 24px 32px;
+  }
+  .moment-quote {
+    background: var(--white);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+  }
+  .moment-quote p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .rating-section { margin-bottom: 28px; }
+  .rating-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .stars {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .star {
+    font-size: 32px;
+    cursor: pointer;
+    transition: transform 0.15s;
+    filter: grayscale(1) opacity(0.3);
+  }
+  .star.lit {
+    filter: none;
+    transform: scale(1.1);
+  }
+  .rating-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .streak-update {
+    background: var(--green-light);
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .su-icon { font-size: 32px; }
+  .su-text { flex: 1; }
+  .su-title { font-size: 14px; font-weight: 600; color: var(--green); margin-bottom: 3px; }
+  .su-sub { font-size: 12px; color: var(--green-mid); }
+  .share-row { display: flex; gap: 10px; }
+  .share-btn {
+    flex: 1;
+    background: var(--white);
+    border: 1.5px solid var(--green-light);
+    border-radius: 12px;
+    padding: 12px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 4 — STREAK BREAK
+  ══════════════════════════════════════ */
+  .s4-hero {
+    background: linear-gradient(160deg, #2a1f1f 0%, #1a1a18 100%);
+    padding: 96px 28px 32px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .s4-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, rgba(224,82,82,0.12) 0%, transparent 60%);
+  }
+  .broken-flame {
+    font-size: 52px;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0.6;
+    filter: grayscale(0.4);
+  }
+  .s4-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .s4-sub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.5;
+  }
+  .s4-body {
+    background: var(--cream);
+    flex: 1;
+    padding: 28px 24px 32px;
+  }
+  .care-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(13,74,53,0.06);
+    text-align: center;
+  }
+  .care-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+  .care-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .care-text { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+  .rescue-btn {
+    width: 100%;
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rescue-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+  }
+  .share-break-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1.5px solid rgba(26,26,24,0.12);
+    border-radius: 14px;
+    padding: 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* ══════════════════════════════════════
+     SCREEN 5 — MILESTONE UNLOCK
+  ══════════════════════════════════════ */
+  .s5-full {
+    background: var(--green);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 96px 28px 48px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .confetti-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .confetti-dot {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    animation: confettiFall linear infinite;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(800px) rotate(720deg); opacity: 0; }
+  }
+  .milestone-badge {
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    margin-bottom: 28px;
+    position: relative;
+    animation: badgePop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes badgePop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .milestone-badge::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: ringPulse 2s ease-out infinite;
+  }
+  @keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+  .ms-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .ms-title {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .ms-body {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.65;
+    max-width: 280px;
+    margin: 0 auto 36px;
+  }
+  .unlock-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+  }
+  .uc-icon { font-size: 36px; flex-shrink: 0; }
+  .uc-info { flex: 1; }
+  .uc-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+  .uc-name { font-family: var(--serif); font-size: 18px; color: var(--white); margin-bottom: 3px; }
+  .uc-desc { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .ms-cta {
+    width: 100%;
+    background: var(--gold);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    margin-bottom: 12px;
+  }
+  .ms-share {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 13px;
+    width: 100%;
+    font-family: var(--sans);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 72px;
+    background: var(--white);
+    border-top: 1px solid rgba(26,26,24,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px 8px;
+    z-index: 20;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  .nav-icon { font-size: 22px; }
+  .nav-label { font-size: 10px; font-weight: 500; color: var(--ink-muted); }
+  .nav-item.active .nav-label { color: var(--green); }
+  .nav-item.active .nav-icon { filter: none; }
+
+  /* screen top gradient for status bar readability */
+  .screen-top-gradient {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 100px;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* label row below phones */
+  .prototype-title {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .prototype-nav-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.15);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SCREEN 1: ONBOARDING ═══════════════ -->
+<div class="phone-wrap">
+  <div class="screen-label">01 — First Scan / Onboarding</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="screen-inner">
+        <!-- status bar -->
+        <div class="status-bar" style="background: var(--green); position: sticky; top: 0; z-index: 50;">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 24 24"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2" stroke="white" stroke-width="2" fill="none"/><path d="M20 11v4" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <!-- zalo bar -->
+        <div class="zalo-bar" style="background: var(--green);">
+          <div class="zalo-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+          <div class="zalo-title">Khoảnh Khắc</div>
+          <div class="zalo-more">···</div>
+        </div>
+
+        <div class="s1-hero">
+          <div class="s1-rings"></div>
+          <div class="s1-eyebrow">Phúc Long Heritage Tea</div>
+          <div class="s1-title">Khoảnh<br>Khắc</div>
+          <div class="s1-sub">Moments worth keeping</div>
+        </div>
+
+        <div class="s1-body">
+          <div class="s1-occasion-label">Bạn đang ở khoảnh khắc nào?</div>
+          <div class="occasion-pills">
+            <span class="pill active">☕ Trước khi vào họp</span>
+            <span class="pill">📚 Sau giờ học</span>
+            <span class="pill">⚡ Giữa ca</span>
+            <span class="pill">🌙 Tối về nhà</span>
+          </div>
+          <div class="s1-divider"></div>
+          <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px;">Gợi ý cho bạn</div>
+          <div class="s1-blend-card">
+            <div class="blend-icon">🍵</div>
+            <div class="blend-info">
+              <div class="blend-viet">Trước khi vào họp</div>
+              <div class="blend-en">Before your meeting</div>
+              <div class="blend-desc">Hồng trà đậm vị — giúp bạn tập trung và tự tin trước khoảnh khắc quan trọng.</div>
+            </div>
+          </div>
+          <button class="cta-btn">Bắt đầu chuỗi của tôi →</button>
+          <button class="cta-secondary">Tìm hiểu thêm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 2: STREAK HOME ═══════════════ -->
+<div class="phone-wrap">
+  <div class="screen-label">02 — Streak Home</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="screen-inner">
+        <div class="status-bar" style="background: var(--green); position: sticky; top: 0; z-index: 50;">
+          <span class="status-time">10:14</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2" stroke="white" stroke-width="2" fill="none"/><path d="M20 11v4" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="zalo-bar" style="background: var(--green);">
+          <div class="zalo-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+          <div class="zalo-title">Khoảnh Khắc</div>
+          <div class="zalo-more">···</div>
+        </div>
+
+        <div class="s2-header">
+          <div class="s2-greeting">Chào buổi sáng,</div>
+          <div class="s2-name">John ☀️</div>
+          <div class="streak-card">
+            <div class="streak-flame">🔥</div>
+            <div class="streak-info">
+              <div class="streak-count">7</div>
+              <div class="streak-label">khoảnh khắc tháng này</div>
+            </div>
+            <div class="streak-badge">Tuần 2</div>
+          </div>
+        </div>
+
+        <div class="s2-body">
+          <div class="section-title">Tuần này</div>
+          <div class="week-dots">
+            <div class="week-dot done"></div>
+            <div class="week-dot done"></div>
+            <div class="week-dot today"></div>
+            <div class="week-dot empty"></div>
+            <div class="week-dot empty"></div>
+            <div class="week-dot empty"></div>
+            <div class="week-dot empty"></div>
+          </div>
+
+          <div class="section-title">Chọn khoảnh khắc hôm nay</div>
+          <div class="occasion-list">
+            <div class="occasion-item">
+              <div class="occ-icon green">☕</div>
+              <div class="occ-info">
+                <div class="occ-viet">Trước khi vào họp</div>
+                <div class="occ-en">Before your meeting</div>
+              </div>
+              <div class="occ-arrow">›</div>
+            </div>
+            <div class="occasion-item">
+              <div class="occ-icon gold">⚡</div>
+              <div class="occ-info">
+                <div class="occ-viet">Giữa ca</div>
+                <div class="occ-en">Mid-shift reset</div>
+              </div>
+              <div class="occ-arrow">›</div>
+            </div>
+            <div class="occasion-item">
+              <div class="occ-icon green">📚</div>
+              <div class="occ-info">
+                <div class="occ-viet">Sau giờ học</div>
+                <div class="occ-en">After class</div>
+              </div>
+              <div class="occ-arrow">›</div>
+            </div>
+          </div>
+
+          <div class="locked-banner">
+            <div class="locked-icon">🔒</div>
+            <div class="locked-text">
+              <div class="locked-title">Khoảnh Khắc Đặc Biệt</div>
+              <div class="locked-sub">Mở khoá tại 10 khoảnh khắc</div>
+            </div>
+            <div class="locked-prog">7/10</div>
+          </div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🔥</div>
+            <div class="nav-label" style="color: var(--green);">Chuỗi</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🍵</div>
+            <div class="nav-label">Menu</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🎁</div>
+            <div class="nav-label">Ưu đãi</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Tôi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 3: OCCASION DETAIL + RATING ═══════════════ -->
+<div class="phone-wrap">
+  <div class="screen-label">03 — Occasion Detail & Rating</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="screen-inner">
+        <div class="status-bar" style="background: var(--green); position: sticky; top: 0; z-index: 50;">
+          <span class="status-time">10:22</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2" stroke="white" stroke-width="2" fill="none"/><path d="M20 11v4" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="zalo-bar" style="background: var(--green);">
+          <div class="zalo-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+          <div class="zalo-title">Khoảnh khắc của bạn</div>
+          <div class="zalo-more">···</div>
+        </div>
+
+        <div class="s3-hero">
+          <div class="s3-moment-tag">Khoảnh khắc · Trước khi vào họp</div>
+          <div class="s3-title">Hồng trà<br>buổi sáng</div>
+          <div class="s3-subtitle">Strong black tea · Morning focus</div>
+        </div>
+
+        <div class="s3-body">
+          <div class="moment-quote">
+            <p>Trước khi bước vào họp, hãy để một hớp trà làm lắng đọng mọi thứ lại.</p>
+          </div>
+
+          <div class="rating-section">
+            <div class="rating-title">Khoảnh khắc này thế nào?</div>
+            <div class="stars">
+              <span class="star lit">⭐</span>
+              <span class="star lit">⭐</span>
+              <span class="star lit">⭐</span>
+              <span class="star lit">⭐</span>
+              <span class="star">⭐</span>
+            </div>
+            <div class="rating-hint">Chạm để đánh giá</div>
+          </div>
+
+          <div class="streak-update">
+            <div class="su-icon">🔥</div>
+            <div class="su-text">
+              <div class="su-title">+1 khoảnh khắc!</div>
+              <div class="su-sub">Tháng này: 8 khoảnh khắc · Tuần 2 ✓</div>
+            </div>
+          </div>
+
+          <div class="share-row">
+            <button class="share-btn">
+              <span>📤</span> Chia sẻ
+            </button>
+            <button class="share-btn" style="color: var(--ink-soft); border-color: rgba(26,26,24,0.12);">
+              <span>🔒</span> 2/10
+            </button>
+          </div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🔥</div>
+            <div class="nav-label" style="color: var(--green);">Chuỗi</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🍵</div>
+            <div class="nav-label">Menu</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🎁</div>
+            <div class="nav-label">Ưu đãi</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Tôi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 4: STREAK BREAK ═══════════════ -->
+<div class="phone-wrap">
+  <div class="screen-label">04 — Streak Break</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="screen-inner">
+        <div class="status-bar" style="background: #2a1f1f; position: sticky; top: 0; z-index: 50;">
+          <span class="status-time">11:05</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2" stroke="white" stroke-width="2" fill="none"/><path d="M20 11v4" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="zalo-bar" style="background: #2a1f1f;">
+          <div class="zalo-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+          <div class="zalo-title">Khoảnh Khắc</div>
+          <div class="zalo-more">···</div>
+        </div>
+
+        <div class="s4-hero">
+          <span class="broken-flame">🫶</span>
+          <div class="s4-title">Nghỉ ngơi<br>cũng là chăm sóc<br>bản thân.</div>
+          <div class="s4-sub">Chuỗi 7 khoảnh khắc của bạn đang tạm nghỉ. Không sao cả.</div>
+        </div>
+
+        <div class="s4-body">
+          <div class="care-card">
+            <span class="care-icon">🌿</span>
+            <div class="care-title">Bạn chưa mất gì cả</div>
+            <div class="care-text">Chuỗi của bạn được tạm dừng, không bị xoá. Quay lại bất cứ lúc nào — khoảnh khắc vẫn ở đây chờ bạn.</div>
+          </div>
+
+          <button class="rescue-btn">Tiếp tục chuỗi của tôi →</button>
+          <button class="share-break-btn">
+            <span>📱</span> Chia sẻ lên TikTok
+          </button>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🔥</div>
+            <div class="nav-label" style="color: var(--green);">Chuỗi</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🍵</div>
+            <div class="nav-label">Menu</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🎁</div>
+            <div class="nav-label">Ưu đãi</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Tôi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 5: MILESTONE UNLOCK ═══════════════ -->
+<div class="phone-wrap">
+  <div class="screen-label">05 — Milestone Unlock</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="screen-inner">
+        <div class="status-bar" style="background: var(--green); position: sticky; top: 0; z-index: 50;">
+          <span class="status-time">3:47</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2" stroke="white" stroke-width="2" fill="none"/><path d="M20 11v4" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="zalo-bar" style="background: var(--green);">
+          <div class="zalo-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+          <div class="zalo-title">Khoảnh Khắc</div>
+          <div class="zalo-more">···</div>
+        </div>
+
+        <div class="s5-full">
+          <!-- confetti -->
+          <div class="confetti-bg">
+            <div class="confetti-dot" style="left:10%; background:#c9973a; animation-duration:3.1s; animation-delay:0s;"></div>
+            <div class="confetti-dot" style="left:25%; background:#fff; animation-duration:2.7s; animation-delay:0.3s;"></div>
+            <div class="confetti-dot" style="left:40%; background:#e8f2ed; animation-duration:3.4s; animation-delay:0.6s;"></div>
+            <div class="confetti-dot" style="left:55%; background:#c9973a; animation-duration:2.9s; animation-delay:0.1s;"></div>
+            <div class="confetti-dot" style="left:70%; background:#fff; animation-duration:3.2s; animation-delay:0.8s;"></div>
+            <div class="confetti-dot" style="left:85%; background:#e8f2ed; animation-duration:2.6s; animation-delay:0.4s;"></div>
+            <div class="confetti-dot" style="left:18%; background:#fff; animation-duration:3.5s; animation-delay:1s; width:4px; height:4px;"></div>
+            <div class="confetti-dot" style="left:62%; background:#c9973a; animation-duration:2.8s; animation-delay:0.7s; width:8px; height:8px;"></div>
+          </div>
+
+          <div class="milestone-badge">🎋</div>
+          <div class="ms-eyebrow">Mở khoá thành công</div>
+          <div class="ms-title">10 Khoảnh Khắc<br>của bạn ✨</div>
+          <div class="ms-body">Bạn đã chăm sóc bản thân được 10 lần tháng này. Đây là phần thưởng dành riêng cho bạn.</div>
+
+          <div class="unlock-card">
+            <div class="uc-icon">🌺</div>
+            <div class="uc-info">
+              <div class="uc-label">Khoảnh Khắc Đặc Biệt</div>
+              <div class="uc-name">Trà Sen Mùa Thu</div>
+              <div class="uc-desc">Chỉ dành cho bạn · Tháng 10/2026</div>
+            </div>
+          </div>
+
+          <button class="ms-cta">Đặt ngay — miễn phí ✦</button>
+          <button class="ms-share">
+            <span>📱</span> Chia sẻ khoảnh khắc này
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
